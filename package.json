@@ -4,8 +4,7 @@
     "description": "AnkiVN Leaderboard",
     "main": "index.js",
     "scripts": {
-        "startDev": "nodemon --inspect index.js",
-        "beautiful": "lint-staged"
+        "startDev": "nodemon --inspect index.js"
     },
     "repository": {
         "type": "git",
