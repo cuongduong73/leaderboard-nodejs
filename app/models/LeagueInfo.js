@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const User = require('./User');
 const LeagueData = require('./LeagueData');
-const LeagueDataDetail = require('./LeagueDataDetail');
 
 const userSchema = new Schema(
     {
@@ -10,10 +9,10 @@ const userSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'User',
         },
-        role: {
-            type: String,
-            enum: ['SUBMITTED', 'JOINED', 'MODERATOR', 'CREATOR'],
-            default: 'SUBMITTED',
+        status: {
+            type: Number,
+            enum: [0, 1, 2], // submitted, joined, creator
+            default: 0, // submitted
         },
     },
     {
@@ -53,7 +52,6 @@ const leagueInfoSchema = new Schema(
 leagueInfoSchema.pre('remove', async function (next) {
     try {
         await LeagueData.deleteMany({ league_id: this._id });
-        await LeagueDataDetail.deleteMany({ league_id: this._id });
         for (let i = 0; i < this.users.length; i++) {
             let user = await User.findOne({ _id: this.users[i].user_id });
             index = user.leagues.indexOf(this._id);

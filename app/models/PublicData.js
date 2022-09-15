@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { getTomorrow } = require('../helpers/calculate');
 const Schema = mongoose.Schema;
 
 const publicDataSchema = new Schema(
@@ -28,22 +29,15 @@ const publicDataSchema = new Schema(
             type: Number,
             default: 0,
         },
+        expireAt: {
+            type: Date,
+            default: getTomorrow(),
+            expires: 1, // expire after 1 seconds
+        },
     },
     {
         timestamps: true,
     },
 );
-
-publicDataSchema.index({ updatedAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 });
-publicDataSchema.pre('save', async function (next) {
-    if (
-        !this.isModified('reviews') &&
-        !this.isModified('retention') &&
-        !this.isModified('minutes')
-    )
-        return next();
-    this.xp = (this.retention * this.reviews) / 100 + 4 * this.minutes;
-    next();
-});
 
 module.exports = mongoose.model('PublicData', publicDataSchema);

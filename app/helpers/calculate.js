@@ -4,14 +4,16 @@ function addDays(date, days) {
     return result;
 }
 
-function compareRole(reqRole, targetRole) {
-    const roleMap = {
-        MEMBER: 0,
-        CONTRIBUTOR: 1,
-        MODERATOR: 2,
-        ADMIN: 3,
-    };
-    return roleMap[reqRole] > roleMap[targetRole];
+function getTomorrow() {
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    return tomorrow;
 }
 
-module.exports = { addDays, compareRole };
+function calcXP(reviews, retention, minutes) {
+    let xp = (retention * reviews) / 100 + 4 * minutes;
+    return Math.round((xp + Number.EPSILON) * 100) / 100;
+}
+
+module.exports = { addDays, getTomorrow, calcXP };

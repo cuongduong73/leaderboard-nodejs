@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator');
 const bcrypt = require('bcrypt');
-// const LeagueInfo = require('./LeagueInfo');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -26,15 +25,9 @@ const userSchema = new Schema(
             required: true,
         },
         role: {
-            expired: {
-                type: Date,
-                default: null,
-            },
-            level: {
-                type: String,
-                enum: ['MEMBER', 'CONTRIBUTOR', 'MODERATOR', 'ADMIN'],
-                default: 'MEMBER',
-            },
+            type: Number,
+            enum: [0, 1, 2],
+            default: 0,
         },
         leagues: {
             type: [

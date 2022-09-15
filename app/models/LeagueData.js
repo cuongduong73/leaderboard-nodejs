@@ -1,6 +1,30 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const dataSchema = new Schema(
+    {
+        reviews: {
+            type: Number,
+            required: true,
+        },
+        retention: {
+            type: Number,
+            required: true,
+        },
+        minutes: {
+            type: Number,
+            required: true,
+        },
+        xp: {
+            type: Number,
+            default: 0,
+        },
+    },
+    {
+        _id: false,
+    },
+);
+
 const leagueDataSchema = new Schema(
     {
         league_id: {
@@ -21,20 +45,9 @@ const leagueDataSchema = new Schema(
             type: Number,
             required: true,
         },
-        reviews: {
-            type: Number,
-            required: true,
-        },
-        retention: {
-            type: Number,
-            required: true,
-        },
-        minutes: {
-            type: Number,
-            required: true,
-        },
-        xp: {
-            type: Number,
+        data: {
+            type: [dataSchema],
+            default: [],
         },
     },
     {
@@ -42,15 +55,4 @@ const leagueDataSchema = new Schema(
     },
 );
 
-// calculate xp before save to database
-leagueDataSchema.pre('save', async function (next) {
-    if (
-        !this.isModified('reviews') &&
-        !this.isModified('retention') &&
-        !this.isModified('minutes')
-    )
-        return next();
-    this.xp = (this.retention * this.reviews) / 100 + 4 * this.minutes;
-    next();
-});
 module.exports = mongoose.model('LeagueData', leagueDataSchema);

@@ -1,20 +1,39 @@
-@hostname = http://localhost:3000
-@accessToken = eyJhbGciOiJIUzI1NiJ9.Y2hpcGhlbw.L92A-Al3vnrrvaKo4KPpFdPdOJGH3bilBBReZnteIMs
-@league_id = 631e8e15c817902f073d0978
+#@hostname = http://localhost:3000
+@hostname = https://leaderboard.ankivn.com
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdvY3RvaSIsImlhdCI6MTY2MzE0NzU4MSwiZXhwIjoxNjYzNzUyMzgxfQ.A_6XrbE5T31FsZbALDPvMt81L9E1rjG63DKc1y8dJd0
 
-GET {{hostname}}/api/v1/user HTTP/1.1
+@league_id = 6321cc92a55677d68a7bc2ce
+
+
+GET https://ankivn.herokuapp.com/league/
 
 ###
-GET {{hostname}}/api/v1/user/chipheo HTTP/1.1
+
+GET {{hostname}}/api/v1/user HTTP/1.1
+Authorization: Bearer {{accessToken}}
+
+###
+GET {{hostname}}/api/v1/user/goctoi HTTP/1.1
+Authorization: Bearer {{accessToken}}
 
 ###
 POST {{hostname}}/api/v1/user/create HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "chipheo2",
-    "password": "thino1234",
-    "email": "chipheo2@gmail.com"
+    "username": "admin",
+    "password": "ZjVTy8v6",
+    "email": "ankivn@ankivn.com"
+}
+
+###
+POST {{hostname}}/api/v1/user/create HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "goctoi",
+    "password": "Chelsea@1995",
+    "email": "dhc1995@gmail.com"
 }
 
 ###
@@ -33,9 +52,8 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-    "username": "chipheo1",
-    "role": "CONTRIBUTOR",
-    "duration": 365
+    "username": "goctoi",
+    "role": 1
 }
 ###
 PUT {{hostname}}/api/v1/user/award HTTP/1.1
@@ -43,14 +61,14 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-    "username": "chipheo1",
+    "username": "chipheo",
     "data": {
         "gold": 1
     }
 }
 
 ### 
-DELETE {{hostname}}/api/v1/user/chipheo2 HTTP/1.1
+DELETE {{hostname}}/api/v1/user/chipheo HTTP/1.1
 Authorization: Bearer {{accessToken}}
 
 ###
@@ -58,8 +76,17 @@ POST {{hostname}}/api/v1/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "chipheo",
-    "password": "thino123"
+    "username": "admin",
+    "password": "ZjVTy8v6"
+}
+
+###
+POST {{hostname}}/api/v1/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "goctoi",
+    "password": "Chelsea@1995"
 }
 
 ###
@@ -69,7 +96,7 @@ GET {{hostname}}/api/v1/league HTTP/1.1
 GET {{hostname}}/api/v1/league/{{league_id}} HTTP/1.1
 
 ###
-GET {{hostname}}/api/v1/league/{{league_id}}/detail?d=1 HTTP/1.1
+GET {{hostname}}/api/v1/league/{{league_id}}/detail?d=10 HTTP/1.1
 
 ###
 GET {{hostname}}/api/v1/league/global HTTP/1.1
@@ -80,9 +107,9 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-    "name": "ankivn",
-    "season": 1,
-    "start": 1662885190,
+    "name": "AnkiVN Challenge",
+    "season": 5,
+    "start": 1661706000,
     "duration": 100,
     "constraint": 20
 }
@@ -92,9 +119,9 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-    "name": "ankivn",
-    "season": 2,
-    "start": 1662885190,
+    "name": "Test",
+    "season": 1,
+    "start": 1662991992,
     "duration": 100,
     "constraint": 20
 }
@@ -118,7 +145,7 @@ Authorization: Bearer {{accessToken}}
 
 {
     "id": "{{league_id}}",
-    "username": "goctoi"
+    "username": "chipheo"
 }
 
 ###
@@ -128,7 +155,7 @@ Authorization: Bearer {{accessToken}}
 
 {
     "id": "{{league_id}}",
-    "username": "goctoi"
+    "username": "chipheo"
 }
 
 ###
@@ -142,6 +169,30 @@ Authorization: Bearer {{accessToken}}
     "retention": 100,
     "minutes": 100
 }
+
+###
+POST {{hostname}}/api/v1/league/sync/private HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "id": "{{league_id}}",
+    "streak": 100,
+    "reviews": 1000,
+    "retention": 100,
+    "minutes": 100,
+    "study_days": 10,
+    "details": [
+        {
+            "day": 4,
+            "reviews": 0,
+            "retention": 0,
+            "minutes": 0
+        }
+    ]
+}
+
+
 ###
 POST {{hostname}}/api/v1/league/sync/private HTTP/1.1
 Content-Type: application/json
@@ -169,6 +220,493 @@ Authorization: Bearer {{accessToken}}
         },
         {
             "day": 3,
+            "reviews": 0,
+            "retention": 0,
+            "minutes": 0
+        },
+        {
+            "day": 4,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },
+        {
+            "day": 5,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 6,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 7,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 8,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 9,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 10,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 11,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 12,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 13,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 14,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 15,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 16,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 17,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 18,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 19,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 20,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 21,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 22,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 23,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 24,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 25,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 26,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 27,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 28,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 29,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 30,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 31,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 32,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 33,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 34,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 35,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 36,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 37,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 38,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 39,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 40,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 41,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 42,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 43,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 44,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 45,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 46,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 47,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 48,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 49,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 50,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 51,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 52,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 53,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 54,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 55,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 56,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 57,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 58,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 59,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+                },{
+            "day": 60,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 61,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 62,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 63,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 64,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 65,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 66,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 67,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 68,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 69,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 70,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 71,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 72,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 73,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 74,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 75,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 76,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 77,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 78,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 79,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 80,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 81,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 82,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 83,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 84,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 85,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 86,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 87,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 88,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 89,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 90,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 91,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 92,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 93,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 94,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 95,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 96,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 97,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 98,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 99,
+            "reviews": 1000,
+            "retention": 100,
+            "minutes": 100
+        },{
+            "day": 100,
             "reviews": 1000,
             "retention": 100,
             "minutes": 100
