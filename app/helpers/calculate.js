@@ -11,8 +11,12 @@ function getTomorrow() {
     return tomorrow;
 }
 
-function calcXP(reviews, retention, minutes) {
-    let xp = (retention * reviews) / 100 + 4 * minutes;
+function calcXP(reviews, retention, minutes, study_day, curr_day) {
+    let xp = 0;
+    xp = (retention * reviews) / 100 + 4 * minutes;
+    if (curr_day !== undefined) {
+        xp = xp * study_day / curr_day;
+    }
     return Math.round((xp + Number.EPSILON) * 100) / 100;
 }
 

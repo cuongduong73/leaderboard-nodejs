@@ -3,7 +3,7 @@ const LeagueInfo = require('../models/LeagueInfo');
 const LeagueData = require('../models/LeagueData');
 const PublicData = require('../models/PublicData');
 const responseHTTP = require('../helpers/responseHTTP');
-const { calcXP } = require('../helpers/calculate');
+const { calcXP, getTomorrow } = require('../helpers/calculate');
 
 async function add_user_to_league(userInfo, leagueInfo) {
     // add user to league data with default study value
@@ -327,6 +327,7 @@ const leagueController = {
                     retention: req.body.retention,
                     minutes: req.body.minutes,
                     xp: xp,
+                    expireAt: getTomorrow(),
                 });
             } else {
                 userData.streak = req.body.streak;
@@ -334,6 +335,7 @@ const leagueController = {
                 userData.retention = req.body.retention;
                 userData.minutes = req.body.minutes;
                 userData.xp = xp;
+                userData.expireAt = getTomorrow();
                 await userData.save();
             }
             return responseHTTP(res, 204, 'Sync global successfully !');
@@ -391,6 +393,8 @@ const leagueController = {
                 leagueData.data[0].reviews,
                 leagueData.data[0].retention,
                 leagueData.data[0].minutes,
+                leagueData.study_days,
+                today
             );
 
             for (let i = 0; i < req.body.details.length; i++) {
@@ -416,54 +420,6 @@ const leagueController = {
             return responseHTTP(res, 500, error.message);
         }
     },
-    // syncAdmin: async (req, res) => {
-    //     try {
-    //         const leagueUser = req.leagueInfo.users.find(
-    //             (u) => u.user_id.toString() === req.reqUserDB._id.toString(),
-    //         );
-    //         if (!leagueUser || leagueUser.status === 0) {
-    //             return responseHTTP(res, 403, `User ${req.reqUserDB.username} hasn't joined ${req.leagueInfo.name} - seasson ${req.leagueInfo.season}`);
-    //         }
-
-    //         // check date
-    //         const startDate = req.leagueInfo.start;
-    //         const today = Math.ceil(
-    //             (Date.now() - startDate) / (1000 * 60 * 60 * 24),
-    //         );
-    //         if (today <= 0) {
-    //             return responseHTTP(res, 406, `${req.leagueInfo.name} - seasson ${req.leagueInfo.season} hasn't started`);
-    //         }
-
-    //         if (today > req.leagueInfo.duration) {
-    //             return responseHTTP(res, 406, `${req.leagueInfo.name} - seasson ${req.leagueInfo.season} ended`);
-    //         }
-
-    //         const leagueData = await LeagueData.findOne({
-    //             league_id: req.leagueInfo._id,
-    //             user_id: req.reqUserDB._id,
-    //         });
-
-    //         leagueData.study_days = req.body.study_days;
-    //         leagueData.streak = req.body.streak;
-    //         leagueData.data[0].reviews = req.body.reviews;
-    //         leagueData.data[0].retention = req.body.retention;
-    //         leagueData.data[0].minutes = req.body.minutes;
-    //         leagueData.data[0].xp = calcXP(leagueData.data[0].reviews, leagueData.data[0].retention, leagueData.data[0].minutes);
-
-    //         for (let i = 0; i < req.body.details.length; i++) {
-    //             let index = req.body.details[i].day;
-    //             leagueData.data[index].reviews = req.body.details[i].reviews;
-    //             leagueData.data[index].retention = req.body.details[i].retention;
-    //             leagueData.data[index].minutes = req.body.details[i].minutes;
-    //             leagueData.data[index].xp = calcXP(leagueData.data[index].reviews, leagueData.data[index].retention, leagueData.data[index].minutes);
-    //         }
-
-    //         await leagueData.save();
-    //         return responseHTTP(res, 204, `Sync ${req.leagueInfo.name} - seasson ${req.leagueInfo.season} successfully !`);
-    //     } catch (error) {
-    //         return responseHTTP(res, 500, error.message);
-    //     }
-    // },
 };
 
 module.exports = leagueController;

@@ -1,8 +1,11 @@
 const User = require('../models/User');
 const LeagueData = require('../models/LeagueData');
 const LeagueInfo = require('../models/LeagueInfo');
+const ResetToken = require('../models/Reset')
 const { isAdmin, isMod } = require('../helpers/permission');
 const responseHTTP = require('../helpers/responseHTTP');
+// const emailSender = require('../helpers/email')
+// const randtoken = require('rand-token');
 
 const userController = {
     // GET /api/user
@@ -144,6 +147,31 @@ const userController = {
             return responseHTTP(res, 500, error.message);
         }
     },
+
+    // resetPassword: async (req, res) => {
+    //     try {
+    //         const user = await User.findOne({ email: req.body.email});
+    //         if (!user) {
+    //             return responseHTTP(res, 404, `Your email ${req.body.email} isn't in our database`);
+    //         }
+    //         const token = randtoken.generate(20);
+    //         const tokenDB = await ResetToken.findOne({username: user.username});
+    //         if (!tokenDB) {
+    //             await ResetToken.create({
+    //                 token: token,
+    //                 username: user.username
+    //             });
+    //         }
+    //         else {
+    //             tokenDB.token = token;
+    //             await tokenDB.save();
+    //         }
+    //         emailSender.sendEmail(user.username, user.email, token)
+    //         return responseHTTP(res, 200, `Please check your email`);
+    //     } catch (error) {
+    //         return responseHTTP(res, 500, error.message);
+    //     }
+    // },
 };
 
 module.exports = userController;

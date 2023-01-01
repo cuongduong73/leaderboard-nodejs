@@ -23,6 +23,9 @@ router.get(
 // register / create user
 router.post('/create', userController.create);
 
+// reset password
+// router.post('/reset-password', userController.resetPassword);
+
 // update user information (avatar, password, ...)
 router.put(
     '/password',
